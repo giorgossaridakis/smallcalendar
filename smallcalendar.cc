@@ -9,7 +9,7 @@ int CalcDayNumFromDate(int y, int m, int d);
 int isleapyear(int year);
 void leavespaces(int nextday);
 
-const char *daysofweek[] = {
+const char *daysofweek[] = { 
     "Wednesday",
     "Thursday",
     "Friday",
@@ -38,15 +38,8 @@ int daysinmonth[]={ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 int main(int argc, char *argv[])
 {
-  int i, m, y, d=1, day, spaces, tspace;
+  int i, m=-1, y, d=1, day, spaces;
   char month[20];
-  
-  // current year and month
-  time_t now = time(0);
-  tm *ltm = localtime(&now);
-  y=1900 + ltm->tm_year;
-  m=ltm->tm_mon;
-//   d=ltm->tm_mday;
   
   // if argument parameters are given, disregard current calendar
   if (argc>2) {
@@ -55,31 +48,33 @@ int main(int argc, char *argv[])
    if (atoi(month))
     m=atoi(month)-1; 
    else {
-    m=-1;
     month[0]=toupper(month[0]);
     for (i=1;i<strlen(month);i++)
      month[i]=tolower(month[i]); 
     for (i=0;i<12;i++)
      if (!strcmp(month, months[i]))
-    m=i; }
+    m=i; } }
+    // if something is wrong with parameters, use current calendar
     if (m>11 || m<0 || y<1) {
-     cout << "invalid month/year!" << endl;
-   exit(0); } }
+     // current year and month
+     time_t now = time(0);
+     tm *ltm = localtime(&now);
+     y=1900 + ltm->tm_year;
+    m=ltm->tm_mon; }   
    
    // printout calendar
-   daysinmonth[1]+=isleapyear(y);
    cout << "                       " << months[m] << " " << y << endl;
    cout << "     Sun     Mon     Tue     Wed     Thu     Fri     Sat" << endl;
    day=CalcDayNumFromDate(y, m+1, d);
    if (day>3)
-    spaces=7+((day-4)*8);
+    spaces=(day-4)*8;
    else
-    spaces=31+((day)*8);
+    spaces=24+((day)*8);
    leavespaces(spaces);
+   daysinmonth[1]+=isleapyear(y);
    for (i=d;i<daysinmonth[m]+1;i++) {
-    tspace=(d>9) ? 1 : 0;
-    if (d>1) // first day has already enough spaces
-     leavespaces(7-tspace);
+    spaces=(d>9) ? 1 : 0;
+    leavespaces(7-spaces);
     cout << d;
     day=CalcDayNumFromDate(y, m+1, d);
     if (day==3) // next line after Saturday
