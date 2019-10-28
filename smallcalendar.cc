@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
     if (day==3) // next line after Saturday
      cout << endl; 
    ++d; }
+   cout << endl;
 
  return 0;
 }
