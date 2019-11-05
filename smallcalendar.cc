@@ -40,11 +40,11 @@ int daysinmonth[]={ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 int main(int argc, char *argv[])
 {
-  int i, m=-1, y, today, d=1, day, spaces;
+  int i, m=-1, y, d=1, day, spaces;
   char month[20];
   time_t now = time(0);
   tm *ltm = localtime(&now);
-  int thismonth=ltm->tm_mon, thisyear=1900+ltm->tm_year;
+  int thismonth=ltm->tm_mon, thisyear=1900+ltm->tm_year, today=ltm->tm_mday;
   
   // if argument parameters are given, disregard current calendar
   if (argc>2) {
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     leavespaces(SPACES-3);
    cout << firstthreeletters(daysofweek[i]); }
    cout << endl;
-   today=day=CalcDayNumFromDate(y, m+1, d);
+   day=CalcDayNumFromDate(y, m+1, d);
    if (day>3)
     spaces=(day-4)*SPACES;
    else
